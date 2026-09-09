@@ -1,4 +1,25 @@
 /* Chapter-scale composition. Every academic sentence and evidence image remains original. */
+/* Three independent scroll-directed shots; the original figures are the static fallback. */
+#research .research-motion-viewport{position:relative;overflow:hidden;background:#000}
+.research-wind-sweep{display:none;pointer-events:none}
+#research .research-concept[data-motion-ready="true"]{height:calc(var(--shot-height) + var(--shot-distance));overflow:visible;border-radius:0;isolation:auto;scroll-margin-top:85px}
+#research [data-motion-ready="true"] .research-motion-viewport{position:sticky;top:var(--shot-top);height:var(--shot-height);width:100%;border-radius:0;isolation:isolate;overflow:clip;-webkit-mask-image:linear-gradient(#000 0%,#000 94%,transparent 100%);mask-image:linear-gradient(#000 0%,#000 94%,transparent 100%)}
+#research [data-motion-ready="true"] .research-motion-viewport>img{display:block;width:100%;height:100%;max-height:none;aspect-ratio:auto;object-fit:contain;transform-origin:center;transition:none;-webkit-mask-image:none;mask-image:none}
+#research [data-motion-visible="true"] .research-motion-viewport>img{will-change:transform,opacity}
+#research [data-motion-ready="true"] .research-wind-sweep{display:block;position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.research-wind-sweep path{fill:none;stroke:#a5d7f8;stroke-width:1.4;stroke-linecap:round;stroke-dasharray:.21 .79;stroke-dashoffset:1;opacity:0;filter:drop-shadow(0 0 5px #599ecc99)}
+.research-wind-sweep path:nth-child(3n){stroke-width:.7;stroke:#6693b1}
+.research-wind-sweep path:nth-child(4n){stroke-dasharray:.12 .88;stroke-width:2}
+.research-camera-frame{position:absolute;inset:0;display:block;width:100%;height:100%;border:0;background:#000;pointer-events:none;opacity:0}
+#research [data-motion-ready="true"][data-camera-ready="true"] .research-camera-frame{opacity:1}
+#research [data-motion-ready="true"][data-camera-ready="true"] .research-motion-viewport>img{opacity:0!important;will-change:auto}
+@media(prefers-reduced-motion:reduce),(forced-colors:active){
+ #research .research-concept[data-research-motion]{height:auto!important;overflow:hidden}
+ #research [data-research-motion] .research-motion-viewport{position:relative!important;top:auto!important;height:auto!important}
+ #research [data-research-motion] .research-motion-viewport>img{height:auto!important;transform:none!important;opacity:1!important;will-change:auto!important}
+ #research .research-wind-sweep{display:none!important}
+ #research .research-camera-frame{display:none!important}
+}
 :root{--chapter-space:140px}
 .research-card:before{inset:0 0 25%;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%)}
 .site-header nav a[aria-current="location"]{color:#fff;background:#303034}

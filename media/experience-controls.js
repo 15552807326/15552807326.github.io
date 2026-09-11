@@ -1,4 +1,5 @@
 function start(){
+  startProjectVideo();
   startResearchScroll();
   const track=document.querySelector('#capability-track');
   const prev=document.querySelector('#capability-prev'),next=document.querySelector('#capability-next'),position=document.querySelector('#capability-position');
@@ -20,6 +21,38 @@ function start(){
   addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(markSection);}},{passive:true});markSection();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+
+function startProjectVideo(){
+  let active=null,returnFocus=null,previousOverflow='';
+  document.addEventListener('click',event=>{
+    const trigger=event.target.closest?.('a[data-project-video]');
+    if(trigger){
+      if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+      const dialog=document.getElementById(trigger.dataset.projectVideo),video=dialog?.querySelector('video');
+      // A normal MP4 link remains usable if dialogs or JavaScript are unavailable.
+      if(!dialog?.showModal||!video)return;
+      event.preventDefault();if(dialog.open)return;
+      returnFocus=trigger;previousOverflow=document.body.style.overflow;active=dialog;
+      dialog.showModal();document.body.style.overflow='hidden';
+      video.src=video.dataset.src;video.load();
+      const playback=video.play();playback?.catch(()=>{});
+      return;
+    }
+    if(event.target.closest?.('[data-project-video-close]')){active?.close();return;}
+    if(event.target===active){
+      const r=active.getBoundingClientRect();
+      if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)active.close();
+    }
+  });
+  // Capture also handles native Escape closing; no background playback or downloads.
+  document.addEventListener('close',event=>{
+    if(event.target!==active)return;
+    const video=active.querySelector('video');video.pause();video.removeAttribute('src');video.load();
+    document.body.style.overflow=previousOverflow;active=null;
+    if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});returnFocus=null;
+  },true);
+  addEventListener('pagehide',()=>active?.querySelector('video')?.pause());
+}
 
 // Scroll position is the only clock: reversible, no wheel interception or idle animation.
 function startResearchScroll(){

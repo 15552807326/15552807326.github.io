@@ -370,6 +370,20 @@ footer{padding-block:40px}
 .project-details-body h4{font:600 14px/1.5 var(--font-editorial);color:#e7e7ef;letter-spacing:.02em;margin:0 0 8px}
 .project-details-body p{font-size:16px;color:#bcbcc8;line-height:1.85;margin:0 0 20px}
 .project-details-body p:last-child{margin-bottom:0}
+.project-video{margin-top:22px}
+.project-video-trigger{display:inline-flex;align-items:center;gap:18px;min-height:44px;padding:10px 16px;border:1px solid #55555d;border-radius:100px;background:#27272ca6;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:14px;color:#e8e8ef;text-decoration:none;line-height:1.5}
+.project-video-trigger:hover{background:#3a3a42;color:#fff}
+.project-video-trigger:focus-visible,.project-video-close:focus-visible{outline:2px solid #8dc5ff;outline-offset:4px}
+.project-video-trigger span{font-size:12px}
+.project-video-dialog{box-sizing:border-box;width:min(1100px,calc(100% - 32px));max-width:none;max-height:calc(100svh - 32px);margin:auto;padding:22px;border:1px solid #48484d;border-radius:22px;background:#151517;color:#f5f5f7;box-shadow:0 28px 100px #0009;overflow:auto;overscroll-behavior:contain}
+.project-video-dialog:not([open]){display:none}
+.project-video-dialog::backdrop{background:#000c;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.project-video-header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px}
+.project-video-header p{margin:0;font-size:18px;line-height:1.5;font-weight:600;color:#f5f5f7}
+.project-video-close{flex-shrink:0;min-width:70px;min-height:44px;padding:8px 12px;border:1px solid #55555d;border-radius:100px;background:#29292e;color:#eeeef3;font:inherit;font-size:14px;cursor:pointer}
+.project-video-player{display:block;width:100%;height:auto;aspect-ratio:16/9;max-height:calc(100svh - 190px);object-fit:contain;background:#000;border-radius:12px}
+.project-video-fallback{display:inline-block;margin-top:14px;font-size:14px;line-height:1.6;color:#b7b7c1;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:560px){.project-video-dialog{width:calc(100% - 24px);padding:14px;border-radius:18px}.project-video-header{gap:12px}.project-video-header p{font-size:16px}.project-video-player{border-radius:8px}}
 .experience-item:has(.project-concept) .experience-tags{gap:10px 8px;margin-top:22px;flex-wrap:wrap}
 @media(min-width:861px) and (max-width:1100px){
  .experience-item:has(.project-concept){grid-template-columns:1fr 1fr;gap:25px;padding:35px;min-height:750px}

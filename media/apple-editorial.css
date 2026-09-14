@@ -371,10 +371,14 @@ footer{padding-block:40px}
 .project-details-body p{font-size:16px;color:#bcbcc8;line-height:1.85;margin:0 0 20px}
 .project-details-body p:last-child{margin-bottom:0}
 .project-video{margin-top:22px}
-.project-video-trigger{display:inline-flex;align-items:center;gap:18px;min-height:44px;padding:10px 16px;border:1px solid #55555d;border-radius:100px;background:#27272ca6;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:14px;color:#e8e8ef;text-decoration:none;line-height:1.5}
-.project-video-trigger:hover{background:#3a3a42;color:#fff}
+.project-video-trigger{display:inline-flex;align-items:center;gap:18px;min-height:48px;padding:11px 19px;border:1px solid #a6a39c;border-radius:100px;background:linear-gradient(135deg,#343436e8,#171719ed 62%,#29292be8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:15px;font-weight:650;color:#e5e4e2;text-decoration:none;line-height:1.5;box-shadow:inset 0 1px 0 #ffffff26,0 0 20px #e5e4e212;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.project-video-trigger:hover{border-color:#f0ede6;box-shadow:inset 0 1px 0 #ffffff45,0 0 26px #e5e4e22b;color:#fff;transform:translateY(-1px)}
 .project-video-trigger:focus-visible,.project-video-close:focus-visible{outline:2px solid #8dc5ff;outline-offset:4px}
-.project-video-trigger span{font-size:12px}
+.project-video-trigger .project-video-label{font-size:15px;color:#e5e4e2;text-shadow:0 0 12px #f2eee21a}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){.project-video-trigger .project-video-label{background:linear-gradient(115deg,#c2c0ba 0%,#fffdf7 32%,#e5e4e2 58%,#fffdf7 78%,#c8c6c0 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}}
+.project-video-trigger span[aria-hidden]{display:grid;place-items:center;flex-shrink:0;width:24px;height:24px;border:1px solid #d7d4cb80;border-radius:50%;font-size:10px;color:#f3f0e9;background:#ffffff0a}
+@media(prefers-reduced-motion:reduce){.project-video-trigger{transition:none}.project-video-trigger:hover{transform:none}}
+@media(forced-colors:active){.project-video-trigger .project-video-label{background:none;-webkit-text-fill-color:LinkText;text-shadow:none}}
 .project-video-dialog{box-sizing:border-box;width:min(1100px,calc(100% - 32px));max-width:none;max-height:calc(100svh - 32px);margin:auto;padding:22px;border:1px solid #48484d;border-radius:22px;background:#151517;color:#f5f5f7;box-shadow:0 28px 100px #0009;overflow:auto;overscroll-behavior:contain}
 .project-video-dialog:not([open]){display:none}
 .project-video-dialog::backdrop{background:#000c;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}

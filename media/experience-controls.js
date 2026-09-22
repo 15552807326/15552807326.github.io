@@ -11,7 +11,7 @@ function start(){
     prev.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));track.addEventListener('scroll',update,{passive:true});addEventListener('resize',update);update();
   }
   const frame=document.querySelector('#parafoil-stage-frame');
-  if(frame){let visible=false;const send=()=>frame.contentWindow?.postMessage({type:'stage-visibility',visible},location.origin);const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;send();},{rootMargin:'100px'});observer.observe(frame);frame.addEventListener('load',send);addEventListener('message',event=>{if(event.origin===location.origin&&event.source===frame.contentWindow&&event.data?.type==='stage-ready')send();});}
+  if(frame){let visible=false;const send=()=>frame.contentWindow?.postMessage({type:'stage-visibility',visible:visible&&(!document.documentElement.classList.contains('space-intro-active')||document.documentElement.classList.contains('space-intro-unfold'))},location.origin);const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;send();},{rootMargin:'100px'});observer.observe(frame);frame.addEventListener('load',send);document.addEventListener('space-intro-state',send);addEventListener('message',event=>{if(event.origin===location.origin&&event.source===frame.contentWindow&&event.data?.type==='stage-ready')send();});}
   const galleryObserver=new IntersectionObserver(entries=>{for(const entry of entries)entry.target.dataset.inView=String(entry.isIntersecting);},{threshold:.1});
   document.querySelectorAll('.direction-gallery').forEach(el=>{el.dataset.inView='false';galleryObserver.observe(el);});
   const nav=[...document.querySelectorAll('.site-header nav a')];

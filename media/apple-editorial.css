@@ -140,6 +140,7 @@
 .honors-grid li.honor-national-gold .honor-copy h3 mark{display:block;font-size:76px;line-height:1.2;letter-spacing:-.04em;margin-top:14px;color:#edcf9b}
 .honors-grid li.honor-national-gold .honor-copy>p:last-child{max-width:775px}
 .honors-grid li:last-child{grid-column:1/-1;display:grid;grid-template-columns:70px minmax(0,1fr);gap:15px;padding:38px}
+#honors .honors-grid>li:nth-child(6){grid-column:auto}
 .honors-grid li:last-child .honor-copy h3{max-width:none}
 #recognition{padding-block:130px 120px;background:#171719;overflow:hidden}
 .recognition-heading{max-width:850px;margin:0 auto 80px;text-align:center}

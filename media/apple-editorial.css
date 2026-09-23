@@ -416,3 +416,13 @@ footer{padding-block:40px}
  .experience-item:has(.project-concept) .experience-copy>p{font-size:16px;line-height:1.85}
  .project-details-body p{font-size:15px}.project-details>summary{font-size:12px}
 }
+
+/* The doctoral national scholarship shares the national-gold honor treatment. */
+.honors-grid li.honor-scholarship{grid-column:1/-1;min-height:320px;padding:55px 60px;background:radial-gradient(ellipse at 92% 90%,#58412644,transparent 60%),linear-gradient(120deg,#111112,#24201a);border-color:#4b4032;display:grid;grid-template-columns:100px minmax(0,1fr);gap:15px;align-items:start}
+.honor-scholarship .honor-index{font-size:64px;line-height:1;color:#c3b091;letter-spacing:-.06em}
+.honor-scholarship .honor-copy h3{margin:24px 0 0;max-width:none;line-height:1.2}
+.honor-scholarship .honor-copy h3 mark{display:block;font-size:76px;line-height:1.2;letter-spacing:-.04em;color:#edcf9b}
+.honor-scholarship .honor-degree{display:block;font-size:28px;font-weight:500;letter-spacing:.02em;color:#d6c2a1;margin-top:20px}
+@media(max-width:860px){.honors-grid li.honor-scholarship{padding:40px;grid-template-columns:75px minmax(0,1fr);min-height:300px}.honor-scholarship .honor-copy h3 mark{font-size:62px}}
+@media(max-width:560px){.honors-grid li.honor-scholarship{display:block;padding:32px 27px;min-height:0}.honor-scholarship .honor-index{font-size:48px;margin-bottom:25px}.honor-scholarship .honor-copy h3{margin-top:20px}.honor-scholarship .honor-copy h3 mark{font-size:clamp(34px,11vw,53px)}.honor-scholarship .honor-degree{font-size:24px;margin-top:16px}}
+@media(forced-colors:active){.honors-grid li.honor-scholarship{background:Canvas;border-color:CanvasText}.honor-scholarship .honor-index,.honor-scholarship .honor-copy h3 mark,.honor-scholarship .honor-degree{color:CanvasText}}

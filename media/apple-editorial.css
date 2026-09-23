@@ -134,11 +134,11 @@
 .honor-copy h3{font-size:26px;line-height:1.4;color:#efeff5;margin-bottom:20px;max-width:22em}
 .honor-copy h3 mark{display:inline;background:none;color:#efcd99;padding:0;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .honor-copy>p:last-child{font-size:16px;line-height:1.85;color:#a8a8b3;margin:0}
-.honors-grid li:first-child{grid-column:1/-1;min-height:420px;padding:55px 60px;background:radial-gradient(ellipse at 92% 90%,#58412644,transparent 60%),linear-gradient(120deg,#111112,#24201a);border-color:#4b4032;display:grid;grid-template-columns:100px minmax(0,1fr);gap:15px}
-.honors-grid li:first-child .honor-index{font-size:64px;line-height:1;color:#c3b091;letter-spacing:-.06em}
-.honors-grid li:first-child .honor-copy h3{font-size:30px;margin-top:28px}
-.honors-grid li:first-child .honor-copy h3 mark{display:block;font-size:76px;line-height:1.2;letter-spacing:-.04em;margin-top:14px;color:#edcf9b}
-.honors-grid li:first-child .honor-copy>p:last-child{max-width:775px}
+.honors-grid li.honor-national-gold{grid-column:1/-1;min-height:420px;padding:55px 60px;background:radial-gradient(ellipse at 92% 90%,#58412644,transparent 60%),linear-gradient(120deg,#111112,#24201a);border-color:#4b4032;display:grid;grid-template-columns:100px minmax(0,1fr);gap:15px}
+.honors-grid li.honor-national-gold .honor-index{font-size:64px;line-height:1;color:#c3b091;letter-spacing:-.06em}
+.honors-grid li.honor-national-gold .honor-copy h3{font-size:30px;margin-top:28px}
+.honors-grid li.honor-national-gold .honor-copy h3 mark{display:block;font-size:76px;line-height:1.2;letter-spacing:-.04em;margin-top:14px;color:#edcf9b}
+.honors-grid li.honor-national-gold .honor-copy>p:last-child{max-width:775px}
 .honors-grid li:last-child{grid-column:1/-1;display:grid;grid-template-columns:70px minmax(0,1fr);gap:15px;padding:38px}
 .honors-grid li:last-child .honor-copy h3{max-width:none}
 #recognition{padding-block:130px 120px;background:#171719;overflow:hidden}
@@ -213,8 +213,8 @@ footer{padding-block:40px}
  .output-body h3{font-size:21px}.output-group:first-of-type .output-item:first-child{padding:32px;grid-template-columns:65px minmax(0,1fr);gap:22px}
  .output-group:first-of-type .output-item:first-child .output-body h3{font-size:26px}
  .output-group:first-of-type .output-item:first-child .output-footer{flex-direction:column;align-items:flex-start}
- .honors-grid li{padding:28px}.honors-grid li:first-child{padding:40px;grid-template-columns:75px minmax(0,1fr)}
- .honors-grid li:first-child .honor-copy h3 mark{font-size:62px}.honor-copy h3{font-size:23px}
+ .honors-grid li{padding:28px}.honors-grid li.honor-national-gold{padding:40px;grid-template-columns:75px minmax(0,1fr)}
+ .honors-grid li.honor-national-gold .honor-copy h3 mark{font-size:62px}.honor-copy h3{font-size:23px}
  .recognition-feature{grid-template-columns:1fr;gap:35px}.recognition-callout{display:grid;grid-template-columns:1fr 1fr;column-gap:40px}
  .recognition-callout-kicker,.recognition-callout>h3,.recognition-callout>p:not(.recognition-callout-kicker){grid-column:1}
  .recognition-callout .recognition-facts{grid-column:1}.recognition-focus-card{grid-column:2;grid-row:2/6;align-self:center}
@@ -275,10 +275,10 @@ footer{padding-block:40px}
  .honors-grid{grid-template-columns:1fr;gap:18px}
  .honors-grid li{padding:30px 26px;border-radius:25px}.honor-index{margin-bottom:22px}
  .honor-copy h3{font-size:25px}.honor-copy .honor-meta{font-size:11px}.honor-copy>p:last-child{font-size:15px}
- .honors-grid li:first-child{display:block;padding:32px 27px;min-height:0}
- .honors-grid li:first-child .honor-index{font-size:48px;margin-bottom:25px}
- .honors-grid li:first-child .honor-copy h3{font-size:25px;margin-top:20px}
- .honors-grid li:first-child .honor-copy h3 mark{font-size:53px;line-height:1.2;margin-top:20px}
+ .honors-grid li.honor-national-gold{display:block;padding:32px 27px;min-height:0}
+ .honors-grid li.honor-national-gold .honor-index{font-size:48px;margin-bottom:25px}
+ .honors-grid li.honor-national-gold .honor-copy h3{font-size:25px;margin-top:20px}
+ .honors-grid li.honor-national-gold .honor-copy h3 mark{font-size:53px;line-height:1.2;margin-top:20px}
  .honors-grid li:last-child{display:block;padding:30px 26px}
  .recognition-heading{margin-bottom:45px}.recognition-heading .section-label{font-size:10px}
  .recognition-heading h2{font-size:45px;line-height:1.2;margin-top:20px}
@@ -417,12 +417,14 @@ footer{padding-block:40px}
  .project-details-body p{font-size:15px}.project-details>summary{font-size:12px}
 }
 
-/* The doctoral national scholarship shares the national-gold honor treatment. */
-.honors-grid li.honor-scholarship{grid-column:1/-1;min-height:320px;padding:55px 60px;background:radial-gradient(ellipse at 92% 90%,#58412644,transparent 60%),linear-gradient(120deg,#111112,#24201a);border-color:#4b4032;display:grid;grid-template-columns:100px minmax(0,1fr);gap:15px;align-items:start}
-.honor-scholarship .honor-index{font-size:64px;line-height:1;color:#c3b091;letter-spacing:-.06em}
-.honor-scholarship .honor-copy h3{margin:24px 0 0;max-width:none;line-height:1.2}
-.honor-scholarship .honor-copy h3 mark{display:block;font-size:76px;line-height:1.2;letter-spacing:-.04em;color:#edcf9b}
-.honor-scholarship .honor-degree{display:block;font-size:28px;font-weight:500;letter-spacing:.02em;color:#d6c2a1;margin-top:20px}
-@media(max-width:860px){.honors-grid li.honor-scholarship{padding:40px;grid-template-columns:75px minmax(0,1fr);min-height:300px}.honor-scholarship .honor-copy h3 mark{font-size:62px}}
-@media(max-width:560px){.honors-grid li.honor-scholarship{display:block;padding:32px 27px;min-height:0}.honor-scholarship .honor-index{font-size:48px;margin-bottom:25px}.honor-scholarship .honor-copy h3{margin-top:20px}.honor-scholarship .honor-copy h3 mark{font-size:clamp(34px,11vw,53px)}.honor-scholarship .honor-degree{font-size:24px;margin-top:16px}}
-@media(forced-colors:active){.honors-grid li.honor-scholarship{background:Canvas;border-color:CanvasText}.honor-scholarship .honor-index,.honor-scholarship .honor-copy h3 mark,.honor-scholarship .honor-degree{color:CanvasText}}
+/* Equal gold feature cards: doctoral scholarship first, national gold second. */
+.honors-grid li.honor-scholarship,.honors-grid li.honor-national-gold{grid-column:auto;display:block;min-height:450px;padding:40px;background:radial-gradient(ellipse at 92% 90%,#58412644,transparent 60%),linear-gradient(120deg,#111112,#24201a);border-color:#4b4032}
+.honors-grid li.honor-scholarship .honor-index,.honors-grid li.honor-national-gold .honor-index{font-size:52px;line-height:1;color:#c3b091;letter-spacing:-.06em;margin-bottom:24px}
+.honors-grid li.honor-scholarship .honor-copy h3,.honors-grid li.honor-national-gold .honor-copy h3{margin:24px 0 20px;max-width:none;font-size:24px;line-height:1.4}
+.honors-grid li.honor-scholarship .honor-copy h3 mark,.honors-grid li.honor-national-gold .honor-copy h3 mark{display:block;font-size:clamp(38px,4.5vw,60px);line-height:1.2;letter-spacing:-.04em;color:#edcf9b;margin-top:16px}
+.honors-grid li.honor-scholarship .honor-copy h3{margin-top:28px}
+.honor-scholarship .honor-degree{display:block;font-size:26px;font-weight:500;letter-spacing:.02em;color:#d6c2a1;margin-top:20px}
+@media(max-width:1000px) and (min-width:861px){.honors-grid li.honor-scholarship,.honors-grid li.honor-national-gold{padding:32px}}
+@media(max-width:860px){.honors-grid li.honor-scholarship,.honors-grid li.honor-national-gold{grid-column:1/-1;min-height:0}.honors-grid li.honor-scholarship .honor-copy h3 mark,.honors-grid li.honor-national-gold .honor-copy h3 mark{font-size:clamp(38px,8vw,62px)}}
+@media(max-width:560px){.honors-grid li.honor-scholarship,.honors-grid li.honor-national-gold{padding:32px 27px}.honors-grid li.honor-scholarship .honor-index,.honors-grid li.honor-national-gold .honor-index{font-size:48px;margin-bottom:25px}.honors-grid li.honor-scholarship .honor-copy h3,.honors-grid li.honor-national-gold .honor-copy h3{font-size:25px;margin-top:20px}.honors-grid li.honor-scholarship .honor-copy h3 mark,.honors-grid li.honor-national-gold .honor-copy h3 mark{font-size:clamp(34px,11vw,53px)}.honor-scholarship .honor-degree{font-size:24px;margin-top:16px}}
+@media(forced-colors:active){.honors-grid li.honor-scholarship,.honors-grid li.honor-national-gold{background:Canvas;border-color:CanvasText}.honors-grid li.honor-scholarship .honor-index,.honors-grid li.honor-national-gold .honor-index,.honors-grid li.honor-scholarship .honor-copy h3 mark,.honors-grid li.honor-national-gold .honor-copy h3 mark,.honor-scholarship .honor-degree{color:CanvasText}}

@@ -1,8 +1,8 @@
 /**
- * A small, self-contained planet fly-in. No textures, tracking or network work.
+ * Cinematic planet fly-in with a local galactic matte and world-space parallax.
  * Time is owned by the caller; this renderer never schedules animation frames.
  */
-export function createUniverse(canvas) {
+export async function createUniverse(canvas) {
   const gl = canvas.getContext('webgl2', {
     alpha: false, antialias: false, depth: false, stencil: false,
     premultipliedAlpha: false, preserveDrawingBuffer: false,
@@ -21,6 +21,8 @@ export function createUniverse(canvas) {
   precision highp float;
   uniform vec2 uResolution;
   uniform float uTime;
+  uniform sampler2D uGalaxy;
+  uniform sampler2D uSurface;
   out vec4 fragColor;
 
   float hash13(vec3 p) {
@@ -73,10 +75,10 @@ export function createUniverse(canvas) {
         vec2 delta = neighbour + random.xy - local;
         float d = length(delta);
         float rare = pow(random.z, 15.0);
-        float radius = max(0.0013 + rare * 0.004, footprint * 0.34);
+        float radius = max(0.0007 + rare * 0.003, footprint * 0.31);
         float core = exp(-d*d / (radius*radius));
-        float halo = exp(-d / max(radius*3.2, footprint)) * 0.065;
-        float brightness = 0.14 + pow(random.z, 5.0) * 1.7;
+        float halo = exp(-d / max(radius*3.2, footprint)) * 0.035;
+        float brightness = 0.03 + pow(random.z, 9.0) * 2.4;
         vec3 tint = mix(vec3(0.47,0.67,1.0), vec3(1.0,0.86,0.67), random.x);
         light += tint * (core + halo) * brightness;
       }
@@ -85,21 +87,26 @@ export function createUniverse(canvas) {
   }
 
   vec3 sky(vec3 ro, vec3 rd, vec2 uv, float t) {
-    vec3 color = vec3(0.0013,0.0022,0.0050);
-    float dust = terrain(rd * 4.1 + vec3(2.0,0.0,0.0));
-    float cloud = pow(max(dust - 0.25, 0.0), 3.0);
-    color += vec3(0.010,0.023,0.049) * cloud;
-    color += starPlane(ro, rd, 14.0, 3.1, 11.2);
-    color += starPlane(ro, rd, 43.0, 5.3, 43.8) * 0.75;
-    color += starPlane(ro, rd, 95.0, 7.8, 79.4) * 0.55;
-
-    // A distant warm stellar glint contrasts with the cold atmosphere.
-    vec3 sunDirection = normalize(vec3(-0.64,0.32,-1.0));
-    float sunAngle = length(rd - sunDirection);
-    float sun = 0.000020 / (sunAngle*sunAngle + 0.000045);
-    color += vec3(1.0,0.62,0.26) * sun;
-    float shimmer = exp(-sunAngle*sunAngle / 0.000027);
-    color += vec3(1.8,1.30,0.68) * shimmer;
+    // The distant sky is sampled by viewing direction, never screen-locked.
+    // Near star planes translate at different speeds as the camera passes.
+    float filmFit=min(1.0,uResolution.x/uResolution.y);
+    vec2 skyUV=vec2(0.52,0.50)+rd.xy/max(-rd.z,0.15)*vec2(0.35,0.6222)*filmFit;
+    vec3 plate=texture(uGalaxy,clamp(skyUV,0.001,0.999)).rgb;
+    float luminance=dot(plate,vec3(0.2126,0.7152,0.0722));
+    // Restrained silver-blue dust, mostly in the upper-right field. The
+    // matte supplies subtle detail, not a bright full-screen nebula poster.
+    vec3 quietPlate=mix(vec3(luminance)*vec3(0.76,0.87,1.0),plate,0.10);
+    float dustWindow=mix(0.18,0.75,smoothstep(0.25,0.85,skyUV.x));
+    vec3 color=pow(quietPlate,vec3(2.2))*0.078*dustWindow+vec3(0.0002,0.0003,0.0006);
+    color += starPlane(ro, rd, 12.0, 4.2, 11.2)*0.62;
+    color += starPlane(ro, rd, 39.0, 5.3, 43.8)*0.42;
+    color += starPlane(ro, rd, 110.0, 8.1, 79.4)*0.20;
+    // Restrained horizontal diffraction from an off-axis cool-white star.
+    vec2 starPoint=vec2(-0.96,0.43);
+    vec2 delta=rd.xy/max(-rd.z,0.15)-starPoint;
+    float d=length(delta);
+    color+=vec3(0.72,0.85,1.0)*(0.000035/(d*d+0.00012));
+    color+=vec3(0.18,0.32,0.48)*exp(-abs(delta.y)*360.0)*exp(-abs(delta.x)*3.5)*0.04;
     return color;
   }
 
@@ -114,7 +121,7 @@ export function createUniverse(canvas) {
       vec2 delta=f-neighbour-random.xy;
       float radius=mix(0.17,0.43,random.z);
       float d=max(length(delta),0.0001), q=d/radius;
-      if (q<1.7) {
+      if (q<1.7 && random.z>0.60) {
         float s=clamp(q/0.88,0.0,1.0);
         float rim=0.018*exp(-pow((q-0.99)*8.0,2.0));
         float height=-0.060*(1.0-s*s*(3.0-2.0*s))+rim;
@@ -129,15 +136,9 @@ export function createUniverse(canvas) {
     vec3 normal = normalize(p);
     mat3 rotation = spin(t * 0.044 - 0.15);
     vec3 land = rotation * normal;
-    float height = terrain(land * 8.0 + 2.3);
-    float strata = terrain(land * 47.0 + height * 2.0);
-    float grain = noise3(land*245.0);
-    float mineral = smoothstep(0.27,0.74,height);
-    vec3 albedo = mix(vec3(0.095,0.125,0.160),vec3(0.25,0.285,0.32),mineral);
-    albedo *= 0.72+strata*0.46+grain*0.20;
     vec2 spherical=vec2(atan(land.x,land.z),asin(clamp(land.y,-1.0,1.0)));
-    vec3 crater=craters(spherical*12.0);
-    albedo*=1.0+crater.x*1.7;
+    vec2 mapUV=spherical/vec2(6.283185,3.141593)+vec2(0.63,0.5);
+    vec3 albedo=pow(texture(uSurface,mapUV).rgb,vec3(2.2))*vec3(0.79,0.87,0.96);
 
     // Small-scale finite differences supply lighting relief without silhouette popping.
     vec3 terrainPoint = land * 56.0;
@@ -147,22 +148,18 @@ export function createUniverse(canvas) {
                          noise3(terrainPoint+vec3(0,0,0.13))) - centre;
     gradient = transpose(rotation) * gradient;
     gradient -= normal * dot(gradient,normal);
-    vec3 tangentU=normalize(vec3(land.z,0.0,-land.x)+vec3(0.00001,0,0));
-    vec3 tangentV=normalize(cross(land,tangentU));
-    vec3 craterGradient=transpose(rotation)*(tangentU*crater.y+tangentV*crater.z);
-    vec3 reliefNormal = normalize(normal - gradient * 0.45-craterGradient*0.29);
-    // The warm key is exactly the direction of the visible distant star.
-    vec3 key = normalize(vec3(-0.64,0.32,-1.0));
+    vec3 reliefNormal = normalize(normal - gradient * 0.12);
+    vec3 key = normalize(vec3(-0.86,0.48,0.33));
     float illumination = max(dot(reliefNormal,key),0.0);
     float day = smoothstep(-0.16,0.25,dot(normal,key));
     float fill=max(dot(reliefNormal,normalize(vec3(-0.30,0.48,0.87))),0.0);
-    vec3 color = albedo * (vec3(0.010,0.018,0.030)+fill*vec3(0.17,0.25,0.34)+illumination*vec3(1.65,1.26,0.90));
+    vec3 color = albedo * (vec3(0.0015,0.003,0.006)+fill*vec3(0.012,0.022,0.038)+illumination*vec3(1.48,1.31,1.10));
     float rim = pow(1.0 - max(dot(normal,-rd),0.0),3.4);
-    color += vec3(0.12,0.32,0.56) * rim * day * 0.34;
-    color += vec3(0.007,0.019,0.040) * rim;
+    color += vec3(0.09,0.32,0.66) * rim * day * 0.58;
+    color += vec3(0.002,0.006,0.015) * rim;
     vec3 halfVector = normalize(key-rd);
-    float sheen = pow(max(dot(reliefNormal,halfVector),0.0),36.0);
-    color += vec3(0.39,0.45,0.52) * sheen * mineral * 0.09;
+    float sheen = pow(max(dot(reliefNormal,halfVector),0.0),90.0);
+    color += vec3(0.20,0.26,0.34) * sheen * 0.025;
     return color;
   }
 
@@ -170,17 +167,17 @@ export function createUniverse(canvas) {
   // Near moons pass the camera; larger, much more distant worlds remain in the sky.
   const int WORLD_COUNT = 11;
   const vec4 worlds[WORLD_COUNT] = vec4[WORLD_COUNT](
-    vec4(-4.8,  3.7, 13.0, 1.05),
-    vec4( 6.2, -3.4, 10.0, 1.35),
-    vec4(-7.7, -4.5,  2.0, 1.75),
-    vec4( 8.2,  5.9, -4.0, 2.20),
-    vec4(-12.0, 8.9,-13.0, 2.75),
-    vec4(14.8, -7.7,-18.0, 2.50),
-    vec4(-14.0,-10.5,-28.0,1.95),
-    vec4( 3.1,  9.8,  5.0,0.65),
-    vec4( 1.0,-10.0, -5.0,1.15),
-    vec4(19.0,  1.2,-32.0,1.40),
-    vec4(-21.0, 1.0,-36.0,2.05)
+    vec4(-6.8, -5.2, 13.0, 2.30),
+    vec4( 6.1, -2.8,  2.0, 0.78),
+    vec4(-6.8,  3.4, -2.0, 0.58),
+    vec4(18.8,  8.5, -3.0, 5.40),
+    vec4(-13.0,10.2,-25.0,1.00),
+    vec4(17.8,-11.7,-24.0,1.20),
+    vec4(-16.0,-8.5,-32.0,0.72),
+    vec4( 4.0,  5.8,  5.0,0.32),
+    vec4(-3.6, -6.0, -5.0,0.52),
+    vec4( 2.8,  1.6,-17.0,0.50),
+    vec4(-21.0, 1.0,-36.0,0.95)
   );
   vec3 satelliteSurface(vec3 p, vec3 rd, int index, float t) {
     vec4 world = worlds[index];
@@ -200,17 +197,30 @@ export function createUniverse(canvas) {
       dark = vec3(0.032,0.066,0.073);
       pale = vec3(0.22,0.43,0.47);
     }
-    float pattern = smoothstep(0.32,0.70,rock);
+    float pattern = smoothstep(0.28,0.76,rock);
     if (index == 3 || index == 5) {
       // Quiet banding distinguishes distant gas worlds from the rocky landing world.
-      float bands = sin(local.y*29.0 + rock*5.0)*0.5+0.5;
-      pattern = mix(pattern,bands,0.57);
+      float bands = sin(local.y*46.0 + noise3(local*9.0)*1.2+sin(local.x*7.0)*0.35)*0.5+0.5;
+      pattern = 0.30+bands*0.40+rock*0.20;
+      dark=vec3(0.070,0.052,0.039);pale=vec3(0.49,0.40,0.29);
     }
     vec3 albedo = mix(dark,pale,pattern)*(0.78+fine*0.40);
-    vec3 key = normalize(vec3(-0.64,0.32,-1.0));
-    float diffuse = max(dot(n,key),0.0);
+    vec3 key = normalize(vec3(-0.86,0.48,0.33));
+    vec3 relief=n;
+    if(index!=3 && index!=5){
+      vec2 spherical=vec2(atan(local.x,local.z),asin(clamp(local.y,-1.0,1.0)));
+      vec2 mapUV=spherical/vec2(6.283185,3.141593)+vec2(0.17*float(index),0.5);
+      vec3 rockMap=pow(texture(uSurface,mapUV).rgb,vec3(2.2));
+      albedo=rockMap*mix(vec3(0.66,0.78,0.90),vec3(0.96,0.81,0.68),float(index%3)*0.5);
+      vec3 crater=craters(spherical*(index==0?8.0:12.0));
+      vec3 u=normalize(vec3(local.z,0.0,-local.x)+vec3(0.00001,0,0));
+      vec3 v=normalize(cross(local,u));
+      relief=normalize(n-(u*crater.y+v*crater.z)*0.19);
+      albedo*=1.0+crater.x*1.4;
+    }
+    float diffuse = max(dot(relief,key),0.0);
     float fill=max(dot(n,normalize(vec3(-0.30,0.48,0.87))),0.0);
-    vec3 color = albedo * (vec3(0.012,0.018,0.032)+fill*vec3(0.18,0.25,0.34)+diffuse*vec3(1.50,1.14,0.86));
+    vec3 color = albedo * (vec3(0.001,0.002,0.005)+fill*vec3(0.009,0.013,0.022)+diffuse*vec3(1.40,1.23,1.05));
     float rim = pow(1.0-max(dot(n,-rd),0.0),4.4);
     color += vec3(0.045,0.12,0.22)*rim*smoothstep(-0.1,0.5,dot(n,key));
     return color;
@@ -234,18 +244,17 @@ export function createUniverse(canvas) {
 
     // An actual orbital dolly: the sphere keeps its size in world space.
     // End just above its surface. The caller unfolds the homepage over this landing.
-    float distanceToCentre = 26.0;
-    distanceToCentre = mix(distanceToCentre,7.8,ease(0.20,1.45,t));
-    distanceToCentre = mix(distanceToCentre,2.85,ease(1.10,2.45,t));
-    distanceToCentre = mix(distanceToCentre,1.035,ease(2.55,4.22,t));
-    float orbit = mix(0.23,0.0,ease(0.0,4.15,t));
+    float distanceToCentre = mix(26.0,14.5,ease(0.0,1.45,t));
+    distanceToCentre = mix(distanceToCentre,3.2,ease(1.25,2.90,t));
+    distanceToCentre = mix(distanceToCentre,1.035,ease(2.70,4.15,t));
+    float orbit = mix(0.12,0.0,ease(0.0,4.05,t));
     vec3 ro = vec3(sin(orbit),0.05*(1.0-ease(1.5,3.9,t)),cos(orbit));
     ro = normalize(ro) * distanceToCentre;
-    vec3 target = vec3(mix(-2.0,0.0,ease(0.2,2.2,t)),0.0,0.0);
+    vec3 target = vec3(mix(-1.5,0.0,ease(0.3,2.9,t)),mix(0.2,0.0,ease(0.3,2.9,t)),0.0);
     vec3 forward = normalize(target-ro);
     vec3 right = normalize(cross(forward,vec3(0,1,0)));
     vec3 up = cross(right,forward);
-    float lens = mix(1.86,1.98,ease(2.4,4.1,t));
+    float lens = mix(1.64,1.94,ease(1.4,4.0,t));
     vec3 rd = normalize(forward * lens + uv.x * right + uv.y * up);
 
     float b = dot(ro,rd);
@@ -259,7 +268,7 @@ export function createUniverse(canvas) {
       edgeCoverage=primaryHit.y;
       hitWorld = WORLD_COUNT;
     }
-    float othersVisible = 1.0-ease(2.15,3.15,t);
+    float othersVisible = 1.0-ease(2.75,3.65,t);
     if (othersVisible > 0.001) {
       for (int i=0;i<WORLD_COUNT;i++) {
         vec2 hit=sphereIntersection(ro,rd,worlds[i].xyz,worlds[i].w,lens);
@@ -283,17 +292,17 @@ export function createUniverse(canvas) {
     if (hitWorld==WORLD_COUNT || hitWorld<0) {
       float nearest=length(ro-rd*dot(ro,rd));
       vec3 nearNormal=normalize(ro+rd*max(-b,0.0));
-      float sunlit=pow(max(dot(nearNormal,normalize(vec3(-0.64,0.32,-1.0))),0.0),0.7);
+      float sunlit=pow(max(dot(nearNormal,normalize(vec3(-0.86,0.48,0.33))),0.0),0.7);
       float outer=exp(-max(nearest-1.0,0.0)*90.0);
       float inner=smoothstep(0.968,1.0,nearest);
-      color+=vec3(0.075,0.21,0.40)*outer*inner*(0.05+sunlit*0.40);
+      color+=vec3(0.10,0.31,0.72)*outer*inner*(0.02+sunlit*0.65);
       color+=vec3(0.008,0.028,0.07)*exp(-abs(nearest-1.0)*25.0)*sunlit;
     }
 
     // One tilted ring system provides a recognisable silhouette amongst the moons.
     if (othersVisible > 0.001) {
       vec3 ringCentre = worlds[3].xyz;
-      vec3 ringNormal = normalize(vec3(0.12,0.64,1.0));
+      vec3 ringNormal = normalize(vec3(0.34,0.88,0.36));
       float planeDenominator = dot(rd,ringNormal);
       if (abs(planeDenominator)>0.0001) {
         float ringHit = dot(ringCentre-ro,ringNormal)/planeDenominator;
@@ -302,22 +311,26 @@ export function createUniverse(canvas) {
           float ringRadius = length(ringPoint)/worlds[3].w;
           float ringMask = smoothstep(1.24,1.31,ringRadius)*(1.0-smoothstep(1.93,2.03,ringRadius));
           if (ringMask>0.0) {
-            float grooves = 0.64+0.20*sin(ringRadius*79.0)+0.10*sin(ringRadius*157.0);
-            vec3 ringColor = vec3(0.19,0.17,0.24)*grooves;
-            color = mix(color,ringColor,ringMask*0.73*othersVisible);
+            float grooves = 0.58+0.10*sin(ringRadius*190.0)+0.09*sin(ringRadius*437.0)+0.15*noise3(vec3(ringRadius*75.0,0,0));
+            float division=1.0-0.78*exp(-pow((ringRadius-1.62)*53.0,2.0));
+            vec3 key=normalize(vec3(-0.86,0.48,0.33));
+            float along=dot(ringPoint,key);
+            float shadow=1.0-step(along,0.0)*(1.0-smoothstep(worlds[3].w*.92,worlds[3].w*1.05,length(ringPoint-key*along)))*.93;
+            vec3 ringColor=vec3(0.33,0.26,0.18)*grooves*division*shadow;
+            color = mix(color,ringColor,ringMask*0.88*othersVisible);
           }
         }
       }
     }
 
     // Gentle optical response; avoid a white flash at arrival.
-    color *= 1.18;
-    color = color / (1.0 + color);
+    color *= 1.22;
+    color = clamp((color*(2.51*color+0.03))/(color*(2.43*color+0.59)+0.14),0.0,1.0);
     color = pow(max(color,vec3(0.0)),vec3(0.4545));
-    float vignette = 1.0 - 0.18*smoothstep(0.65,2.0,length(uv));
+    float vignette = 1.0 - 0.16*smoothstep(0.65,2.3,length(uv));
     color *= vignette;
     color *= mix(1.0,0.10,ease(4.15,5.05,t));
-    color *= mix(0.40,1.0,ease(0.0,0.30,t));
+    color *= mix(0.82,1.0,ease(0.0,0.30,t));
     fragColor = vec4(color,1.0);
   }`;
 
@@ -355,6 +368,31 @@ export function createUniverse(canvas) {
   const resolution = gl.getUniformLocation(program, 'uResolution');
   const time = gl.getUniformLocation(program, 'uTime');
   const vao = gl.createVertexArray();
+  const galaxy = gl.createTexture();
+  const surface = gl.createTexture();
+  const loadBitmap=source=>new Promise((resolve,reject)=>{
+    const img=new Image();
+    const timer=setTimeout(()=>reject(new Error('Space texture load timed out.')),10000);
+    img.onload=()=>{clearTimeout(timer);resolve(img);};
+    img.onerror=()=>{clearTimeout(timer);reject(new Error('Space texture unavailable.'));};
+    img.src=source;
+  });
+  try {
+    const bitmaps=await Promise.all(['/media/space-galaxy-cinematic-v2.webp','/media/space-rock-surface-v2.webp'].map(loadBitmap));
+    [galaxy,surface].forEach((texture,index)=>{
+      gl.bindTexture(gl.TEXTURE_2D,texture);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
+      gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,bitmaps[index]);
+      gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,index?gl.REPEAT:gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    });
+  } catch(error) {
+    gl.deleteTexture(galaxy);gl.deleteTexture(surface);gl.deleteVertexArray(vao);gl.deleteProgram(program);throw error;
+  }
+  const galaxyUniform=gl.getUniformLocation(program,'uGalaxy');
+  const surfaceUniform=gl.getUniformLocation(program,'uSurface');
 
   function resize() {
     if (disposed) return;
@@ -378,6 +416,12 @@ export function createUniverse(canvas) {
     gl.bindVertexArray(vao);
     gl.uniform2f(resolution, canvas.width, canvas.height);
     gl.uniform1f(time, Number.isFinite(seconds) ? Math.max(0, seconds) : 0);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D,galaxy);
+    gl.uniform1i(galaxyUniform,0);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D,surface);
+    gl.uniform1i(surfaceUniform,1);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
   function dispose() {
@@ -385,6 +429,8 @@ export function createUniverse(canvas) {
     disposed = true;
     gl.deleteVertexArray(vao);
     gl.deleteProgram(program);
+    gl.deleteTexture(galaxy);
+    gl.deleteTexture(surface);
     // Release allocations without poisoning the canvas for a local replay.
   }
   resize();

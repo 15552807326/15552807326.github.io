@@ -187,14 +187,15 @@
     // A slow/failed load leaves an explicit Skip choice, never flashes the page.
     loadTimer = setTimeout(() => finish('load-timeout'), 15000);
     try {
-      rendererModule ||= import('/media/space-universe.js?v=20260922-gate');
+      rendererModule ||= import('/media/space-universe.js?v=7719804bb463');
       const { createUniverse } = await rendererModule;
       if (disposed) return;
-      universe = createUniverse(canvas);
+      universe = await createUniverse(canvas);
+      if (disposed) { universe.dispose(); return; }
       universe.resize();
       const flightCanvas=document.getElementById('space-intro-flight');
       if(flightCanvas){
-        flightModule ||= import('/media/space-flight.js?v=20260922-gate');
+        flightModule ||= import('/media/space-flight.js?v=44b4e7636ac3');
         try {
           const {createFlight}=await flightModule;
           if(disposed)return;

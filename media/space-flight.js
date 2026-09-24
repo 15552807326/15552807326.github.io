@@ -9,7 +9,7 @@ export async function createFlight(canvas) {
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.35));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = .85;
+  renderer.toneMappingExposure = .76;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(36, 1, .1, 160);
   camera.position.set(0,.15,10);
@@ -19,12 +19,12 @@ export async function createFlight(canvas) {
   const envTarget = pmrem.fromScene(environment,.04);
   scene.environment = envTarget.texture;
   environment.dispose(); pmrem.dispose();
-  scene.add(new THREE.HemisphereLight(0xb5cdf5,0x111928,.55));
+  scene.add(new THREE.HemisphereLight(0x8babdb,0x030509,.16));
   function light(color,power,x,y,z) { const l=new THREE.DirectionalLight(color,power);l.position.set(x,y,z);scene.add(l); }
-  light(0xe2eeff,2.4,-3,6,7);
-  light(0x9dbdf8,2.2,5,2,-4);
-  light(0xffdac1,.9,-7,3,-2);
-  light(0xeaf0ff,1.5,4,-1,6);
+  light(0xffe2bd,2.5,-7,5,3);
+  light(0x719bd8,2.0,5,2,-4);
+  light(0xb0d8ff,.5,-3,-1,-4);
+  light(0xcadfff,.38,4,-1,6);
   let model, disposed=false;
   function dispose() {
     if(disposed)return; disposed=true;
@@ -46,20 +46,21 @@ export async function createFlight(canvas) {
     model.traverse(mesh=>{
       if(!mesh.isMesh)return;
       for(const m of Array.isArray(mesh.material)?mesh.material:[mesh.material]) {
-        m.envMapIntensity=1.1;
-        if(/FABRIC/i.test(m.name)){m.color.setRGB(.47,.49,.52);m.metalness=.68;m.roughness=.38;}
-        if(/cord/i.test(m.name)){m.color.setRGB(.18,.22,.29);m.metalness=.2;}
+        m.envMapIntensity=.48;
+        if(/FABRIC/i.test(m.name)){m.color.setRGB(.30,.33,.39);m.metalness=.74;m.roughness=.34;}
+        if(/cord/i.test(m.name)){m.color.setRGB(.12,.16,.23);m.metalness=.35;}
       }
     });
     function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
     const smooth=(a,b,t)=>{const x=Math.max(0,Math.min(1,(t-a)/(b-a)));return x*x*(3-2*x);};
     function render(t){
       if(disposed)return;
-      const away=smooth(.25,3.92,t),far=smooth(2.5,4.0,t);
-      const fit=Math.min(1,camera.aspect);
-      model.position.set((-1.12*(1-away)+Math.sin(t*1.2)*.18*(1-away))*fit, -.58*(1-away), -away*14-far*30);
-      model.rotation.set(.16+Math.sin(t*.9)*.07, Math.PI-.52+away*.62, -.16*Math.sin(Math.PI*away));
-      model.scale.setScalar(fit*(1.15-.60*far));
+      const away=smooth(.1,2.1,t),far=smooth(1.55,4.0,t);
+      const fit=Math.min(1,camera.aspect*1.55);
+      const lateralFit=camera.aspect<.8?.25:1;
+      model.position.set((-1.80*(1-away)+Math.sin(t*1.1)*.24*(1-far))*fit*lateralFit, -.55*(1-away)+.10*Math.sin(away*Math.PI), -away*4-far*24);
+      model.rotation.set(.18+Math.sin(t*.9)*.06, Math.PI-.62+away*.71, -.20*Math.sin(Math.PI*away)+.04*(1-away));
+      model.scale.setScalar(fit*(.87-.30*smooth(2.9,4.0,t)));
       model.visible=t<4.02;
       // Last approach vanishes into the landing point before the page opens there.
       canvas.style.opacity=String(1-smooth(3.62,4.01,t));

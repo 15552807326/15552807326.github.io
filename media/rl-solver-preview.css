@@ -1,0 +1,28 @@
+/* Local research-direction study, sharing the existing editorial layout. */
+#research-solver { scroll-margin-top:110px; }
+#research-solver .direction-copy h3 { color:#e1d2ad; background:linear-gradient(135deg,#faf7ee 8%,#e7d5ad 45%,#a99876); background-clip:text; -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+#research-solver .solver-stage-note { display:block; width:fit-content; margin-top:17px; color:#aa9b7d; font-size:12px; letter-spacing:.03em; }
+#research-solver .solver-stage-note::before { content:''; display:inline-block; width:5px; height:5px; margin-right:8px; border-radius:50%; background:#c6ae7d; vertical-align:middle; }
+#research-solver .direction-gallery { margin-top:22px; }
+#research-solver .direction-image-wrap { aspect-ratio:1672/941; padding:0; }
+#research-solver .direction-image-wrap img { border-radius:0; }
+#research-solver .solver-gallery-label { margin:0 3px 20px; font-size:12px; color:#8d8d96; letter-spacing:.12em; }
+#research-solver .direction-image-link { cursor:zoom-in; }
+#solver-method-lightbox { max-width:1400px; }
+#solver-method-lightbox .image-lightbox-viewport img { display:block; max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; }
+.solver-research-notes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:44px; margin:48px 28px 0; }
+.solver-research-notes>div { border-top:1px solid #343334; padding-top:23px; }
+.solver-note-number { color:#a29374; font-size:11px; letter-spacing:.14em; }
+.solver-research-notes h4 { margin:14px 0 12px; color:#e4e2dd; font-size:23px; font-weight:550; letter-spacing:-.025em; }
+.solver-research-notes p { margin:0; font-size:14px; color:#94949e; line-height:1.9; }
+@media(max-width:560px) {
+  #research-solver { scroll-margin-top:100px; }
+  #research-solver .direction-copy h3 { font-size:34px; }
+  #research-solver .direction-gallery { padding:10px; }
+  #research-solver .solver-stage-note { margin-top:14px; font-size:11px; }
+  .solver-research-notes { grid-template-columns:1fr; margin:25px 8px 0; gap:22px; }
+  .solver-research-notes>div { display:grid; grid-template-columns:26px 1fr; gap:0 10px; padding-top:18px; }
+  .solver-note-number { grid-row:1/3; padding-top:3px; }
+  .solver-research-notes h4 { margin:0 0 7px; font-size:21px; }
+  .solver-research-notes p { grid-column:2; font-size:14px; }
+}

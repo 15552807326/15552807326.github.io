@@ -80,7 +80,7 @@ function startResearchScroll(){
         const height=mobile?Math.min(390,Math.max(280,vh*.48)):Math.min(width*941/1672,vh-header-40);
         shot.height=Math.max(180,height);
         shot.top=Math.max(header+12,(vh-shot.height)/2);
-        shot.distance=vh*(mobile?.72:1.12)*(shot.kind==='wind'?1.1:shot.kind==='landing'?1.4:1);
+        shot.distance=vh*(mobile?.72:1.12)*(shot.kind==='solver'?2.2:shot.kind==='wind'?1.1:shot.kind==='landing'?1.4:1);
         shot.fitW=Math.min(width,shot.height*1672/941);
         shot.fitH=shot.fitW*941/1672;
         shot.progress=undefined;

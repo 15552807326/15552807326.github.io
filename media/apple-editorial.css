@@ -156,6 +156,7 @@
 .recognition-callout{padding:15px 0 0;background:none;border:0;border-radius:0}
 .recognition-callout>h3{font-size:34px;line-height:1.25;letter-spacing:-.03em;margin-block:22px;max-width:14em}
 .recognition-callout>p:not(.recognition-callout-kicker){font-size:17px;line-height:1.8}
+.recognition-callout .recognition-museum-name{color:#f3d5a4;font-size:1.25em;font-weight:700;line-height:1.1;white-space:nowrap}
 .recognition-facts{margin-block:30px;gap:25px}
 .recognition-facts span{background:none;border:0;border-radius:0;padding:0;border-right:1px solid #55504a}
 .recognition-facts span:last-child{border:0}

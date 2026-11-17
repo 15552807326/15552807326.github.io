@@ -1,0 +1,178 @@
+/* Research Atlas — a photographic cover, not a dashboard. */
+#pro-intro.atlas-hero {
+  --cover-bg:#000; --cover-ink:#f4f2ec; --cover-mute:#b7c0c3;
+  --cover-gold:#ddc39e; --cover-edge:clamp(26px,6.7vw,122px);
+  --cover-mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  padding:0; margin:0; isolation:isolate; background:var(--cover-bg); color:var(--cover-ink);
+}
+.atlas-hero-plate {
+  position:relative; isolation:isolate; overflow:clip;
+  background:var(--cover-bg);
+}
+.atlas-hero-inner,.atlas-index-inner {
+  width:min(calc(100% - var(--cover-edge) - var(--cover-edge)),1420px); margin-inline:auto;
+}
+.atlas-hero-inner {
+  position:relative; display:flex; align-items:center;
+  min-height:clamp(548px,calc(80svh - 20px),790px); padding-block:clamp(65px,7.8vh,110px);
+}
+.atlas-cover-art {
+  position:absolute; z-index:-1; inset:1% -5% 0 25%;
+  mix-blend-mode:screen; pointer-events:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 15%,#000);
+  mask-image:linear-gradient(90deg,transparent,#000 15%,#000);
+}
+.atlas-cover-art img {
+  width:100%; height:100%; max-width:none; display:block; object-fit:cover; object-position:25% center;
+  transform-origin:74% 47%; animation:atlas-canopy-arrival 1.55s cubic-bezier(.17,.71,.25,1) both;
+}
+.space-intro-active:not(.space-intro-unfold) .atlas-cover-art img {animation-play-state:paused}
+@keyframes atlas-canopy-arrival { from{transform:translate(1.1%,1.1%) scale(1.055)} to{transform:none} }
+.atlas-hero-plate::before {
+  content:""; position:absolute; z-index:0; inset:0; pointer-events:none;
+  background:linear-gradient(90deg,transparent 24%,#080c101a 38%,transparent 59%),linear-gradient(0deg,#080d13dd 0%,transparent 18%);
+}
+.atlas-hero-copy {position:relative; max-width:58%; color:var(--cover-ink)}
+.atlas-overline {
+  display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:0 0 31px;
+  color:#c5cfd0; font:500 11px/1.4 var(--cover-mono); letter-spacing:.14em;
+}
+.atlas-overline span {display:inline-block;width:26px;height:1px;background:#c6ac89}
+.atlas-overline i {font-style:normal;color:#7d858a;letter-spacing:0}
+.atlas-identity {display:flex;align-items:baseline;flex-wrap:wrap;gap:0 24px}
+#pro-intro .atlas-identity h1 {
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:clamp(76px,6.5vw,105px);line-height:1.08;font-weight:590;letter-spacing:-.057em;
+  margin:0 0 0 -.047em;color:#f4f2ec;text-shadow:none;
+}
+.atlas-signature {
+  color:#d8c6ae;font-family:"Iowan Old Style",Baskerville,"Times New Roman",serif;
+  font-weight:400;font-style:italic;font-size:clamp(22px,2vw,32px);line-height:1.14;letter-spacing:-.037em;
+  transform:translateY(-.14em);white-space:nowrap;
+}
+.atlas-affiliation {margin:17px 0 0;color:#c1c7c8;font-size:15px;line-height:1.65;letter-spacing:.035em}
+.atlas-affiliation span {margin:0 .55em;color:#a4afb2}
+#pro-intro .atlas-theme {
+  display:block;margin:clamp(34px,4.5vh,57px) 0 0;
+  font-family:inherit;font-size:clamp(29px,2.56vw,43px);font-weight:510;line-height:1.4;letter-spacing:-.037em;
+  text-wrap:initial;color:#e0e5e4;background:none;-webkit-text-fill-color:currentColor;
+}
+.atlas-theme span {display:block}
+.atlas-cover-actions {display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:29px}
+.atlas-cover-actions :is(a,button) {
+  min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:0 21px;border:1px solid transparent;border-radius:100px;
+  font-family:inherit;font-size:14px;line-height:1.2;font-weight:550;white-space:nowrap;letter-spacing:0;
+  cursor:pointer;text-decoration:none;transition:background .2s,color .2s,border-color .2s,transform .2s;
+}
+.atlas-cover-film {background:#e8e8df;color:#151a1d!important}
+.atlas-cover-film svg {width:16px;height:16px}
+.atlas-cover-actions .atlas-cover-model {background:#11191de0;color:#d8dedd;border-color:#75808a85}
+.atlas-cover-model svg {width:17px;height:17px;color:#c4cfcf}
+.atlas-plate-legend {
+  position:absolute;bottom:28px;right:0;display:flex;gap:12px;align-items:center;color:#c5cfd2;
+}
+.atlas-legend-mark {
+  padding:6px 10px 6px 0;border-right:1px solid #7b898c85;color:#ddc5a2;
+  font:400 25px/1 Georgia,serif;letter-spacing:-.055em;
+}
+.atlas-plate-legend div {display:grid;gap:3px}
+.atlas-plate-legend div span:first-child {font:500 10px/1.3 var(--cover-mono);letter-spacing:.14em}
+.atlas-plate-legend div span:last-child {font-size:12px;line-height:1.5;letter-spacing:.05em}
+.atlas-hero-index {position:relative;margin:0;border-block:1px solid #a9bdc12c;background:var(--cover-bg)}
+.atlas-index-inner {display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.atlas-route {
+  position:relative;display:grid;grid-template-rows:auto auto;align-content:center;row-gap:4px;
+  text-decoration:none;color:#dce1df;min-height:93px;padding:13px 26px 13px 30px;isolation:isolate;
+  transition:background .22s,color .22s;
+}
+.atlas-route:first-child {padding-left:0}
+.atlas-route::before {content:"";position:absolute;top:22%;bottom:22%;left:0;width:1px;background:#9daeb336}
+.atlas-route:first-child::before {display:none}
+.atlas-route-meta {display:flex;align-items:center;gap:9px;color:#a5afb2;font:500 10px/1.3 var(--cover-mono);letter-spacing:.105em}
+.atlas-route-meta b {font-weight:500;color:var(--cover-gold)}
+.atlas-route-label {font-size:18px;font-weight:520;line-height:1.6;letter-spacing:.04em}
+.atlas-route-arrow {position:absolute;right:8%;top:50%;width:19px;height:19px;color:#a8b5b8;transform:translateY(-50%);transition:transform .2s}
+
+.atlas-model-dialog {
+  position:fixed;inset:0;margin:auto;width:min(1100px,calc(100vw - 48px));max-width:none;
+  height:min(780px,86vh);height:min(780px,86svh);max-height:none;padding:0;overflow:hidden;
+  background:#050708;color:#ecefed;border:1px solid #586670;border-radius:19px;box-shadow:0 26px 110px #0009;
+}
+.atlas-model-dialog:not([open]) {display:none}
+.atlas-model-dialog[open] {display:flex;flex-direction:column}
+.atlas-model-dialog::backdrop {background:#03070be8}
+.atlas-dialog-head {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px;background:#10171b;border-bottom:1px solid #8296a03b}
+.atlas-dialog-head>div {display:flex;align-items:baseline;gap:15px}
+.atlas-dialog-head span {font:500 10px/1.3 var(--cover-mono);color:#c8b08f;letter-spacing:.14em}
+.atlas-dialog-head h2 {font:550 19px/1.45 system-ui,sans-serif;color:#e9edeb;margin:0;letter-spacing:-.02em}
+.atlas-dialog-head button {width:44px;height:44px;display:grid;place-items:center;background:#1a2329;border:1px solid #52616b;border-radius:50%;color:#e7eeea;cursor:pointer}
+.atlas-model-dialog iframe {display:block;background:#000;border:0;width:100%;height:100%;flex:1;min-height:0}
+#pro-intro :is(a,button):focus-visible {outline:2px solid #f1c990;outline-offset:3px}
+.atlas-route:focus-visible {outline-offset:-4px!important}
+@media(hover:hover) {
+  .atlas-cover-actions .atlas-cover-film:hover {background:#fffdf4;transform:translateY(-2px)}
+  .atlas-cover-actions .atlas-cover-model:hover,.atlas-dialog-head button:hover {background:#24323a;border-color:#b6c7c8;transform:translateY(-2px)}
+  .atlas-route:hover {color:#fff;background:#1d292f88}
+  .atlas-route:hover .atlas-route-arrow {transform:translate(3px,-50%)}
+}
+@media(min-width:1600px) {.atlas-cover-art{left:31%;right:-1%}}
+@media(max-width:900px) and (min-width:701px) {
+  #pro-intro.atlas-hero {--cover-edge:34px}
+  .atlas-hero-inner {min-height:545px}
+  .atlas-hero-copy {max-width:65%}
+  .atlas-cover-art {left:22%;right:-13%;opacity:.82}
+  .atlas-cover-art img {object-position:left center}
+  .atlas-identity {gap:0 15px}
+  #pro-intro .atlas-identity h1 {font-size:74px}
+  .atlas-signature {font-size:23px}
+}
+@media(max-width:700px) {
+  #pro-intro.atlas-hero {--cover-edge:clamp(20px,6.1vw,39px)}
+  .atlas-hero-inner {display:block;min-height:0;padding-block:clamp(33px,8.5vw,52px) clamp(202px,54vw,318px)}
+  .atlas-hero-copy {max-width:100%}
+  .atlas-overline {gap:8px;margin:0 0 21px;font-size:9.5px;letter-spacing:.12em}
+  .atlas-overline span {width:20px}
+  .atlas-identity {gap:0 14px}
+  #pro-intro .atlas-identity h1 {font-size:clamp(56px,14.7vw,82px);letter-spacing:-.053em}
+  .atlas-signature {font-size:clamp(20px,5.5vw,28px);transform:translateY(-.13em)}
+  .atlas-affiliation {font-size:13px;margin-top:11px}
+  #pro-intro .atlas-theme {font-size:clamp(23px,6.2vw,34px);margin-top:24px;line-height:1.36;letter-spacing:-.036em}
+  .atlas-cover-actions {margin-top:19px;gap:9px}
+  .atlas-cover-actions :is(a,button) {min-height:44px;font-size:13px;padding:0 14px;gap:7px}
+  .atlas-cover-art {
+    inset:auto -8% 0 0;height:clamp(210px,58vw,340px);
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 18%,#000 94%,#000a);
+    mask-image:linear-gradient(to bottom,transparent 0%,#000 18%,#000 94%,#000a);
+  }
+  .atlas-cover-art img {object-fit:cover;object-position:58% 48%}
+  .atlas-hero-plate::before {background:linear-gradient(0deg,#090e14b8,transparent 14%)}
+  .atlas-plate-legend {bottom:12px;left:0;right:auto;gap:6px}
+  .atlas-legend-mark {font-size:16px;padding:2px 7px 2px 0}
+  .atlas-plate-legend div {gap:0}
+  .atlas-plate-legend div span:first-child {font-size:8px}
+  .atlas-plate-legend div span:last-child {font-size:10px}
+  .atlas-index-inner {width:calc(100% - var(--cover-edge) - var(--cover-edge))}
+  .atlas-route {min-height:73px;padding:10px 5px 10px 13px;row-gap:6px}
+  .atlas-route-meta {font-size:8px;letter-spacing:.025em;gap:5px}
+  .atlas-route-label {font-size:15px;letter-spacing:0;line-height:1.4}
+  .atlas-route-arrow {width:12px;height:12px;right:8px;top:auto;bottom:19px;transform:none}
+  .atlas-route:hover .atlas-route-arrow {transform:none}
+  .atlas-model-dialog {height:min(720px,88svh);width:calc(100vw - 18px);border-radius:12px}
+  .atlas-dialog-head {padding:10px 13px}
+  .atlas-dialog-head>div {gap:8px}
+  .atlas-dialog-head h2 {font-size:16px}
+}
+@media(max-width:370px) {
+  .atlas-route {padding-left:9px}
+  .atlas-route-arrow {display:none}
+}
+@media(prefers-reduced-motion:reduce) {
+  .atlas-cover-art img {animation:none}
+  .atlas-cover-actions :is(a,button),.atlas-route,.atlas-route-arrow {transition:none}
+}
+@media(forced-colors:active) {
+  .atlas-cover-art {opacity:.18}
+  .atlas-cover-actions :is(a,button),.atlas-hero-index,.atlas-dialog-head button {border:1px solid ButtonText}
+  #pro-intro .atlas-theme {color:CanvasText}
+}

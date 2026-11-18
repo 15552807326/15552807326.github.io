@@ -30,22 +30,8 @@
 .pressure-study-cover .ps-loupe-rule{stroke:#afbec2;stroke-width:1.4;fill:none}
 .pressure-study-cover .ps-detail-id text{fill:#c6d1d3;text-anchor:middle;font:16px ui-monospace,Menlo,monospace;letter-spacing:.08em}
 .pressure-study-cover .ps-loupe-cut{clip-path:url(#ps-loupe-clip)}
-.pressure-study-cover .ps-bar{position:relative;z-index:2;padding:0 var(--ps-gutter);background:#000;border-top:1px solid var(--ps-line)}
-.pressure-study-cover .ps-bar-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:78px}
-.pressure-study-cover .ps-instruction{display:flex;align-items:center;gap:12px;margin:0;white-space:nowrap;color:#e1e7e8;font-weight:560;font-size:15px}
-.pressure-study-cover .ps-instruction i{display:inline-block;width:23px;height:2px;background:linear-gradient(90deg,#386aab,#62c1ce,#f3ad59)}
-.pressure-study-cover .ps-instruction span{padding-left:11px;border-left:1px solid #485055;font-weight:400;color:#a8b2b5;font-size:12px}
-.pressure-study-cover .ps-selectors{display:flex;align-self:stretch;align-items:stretch}
-.pressure-study-cover .ps-selectors button{position:relative;display:flex;align-items:center;justify-content:center;gap:9px;border:none;border-radius:0;min-height:44px;padding:10px clamp(12px,2vw,34px);background:#000;color:#a5afb2;font-family:inherit;font-weight:500;cursor:pointer}
-.pressure-study-cover .ps-selectors button span{font-size:15px;line-height:1.35}
-.pressure-study-cover .ps-selectors small{font:11px ui-monospace,Menlo,monospace;color:#899499;letter-spacing:.055em}
-.pressure-study-cover .ps-selectors button[aria-pressed="true"]{color:#fff;background:#101214}
-.pressure-study-cover .ps-selectors button[aria-pressed="true"]::before{position:absolute;top:-1px;right:0;left:0;height:2px;background:var(--ps-accent);content:""}
-.pressure-study-cover [data-pressure-select="warm"]{--ps-accent:#ffc784}
-.pressure-study-cover [data-pressure-select="cool"]{--ps-accent:#8adce6}
-.pressure-study-cover [data-pressure-select="edge"]{--ps-accent:#c0cae4}
-.pressure-study-cover .ps-selectors button:hover{color:#fff;background:#15181b}
-.pressure-study-cover .ps-selectors button:focus-visible{outline:2px solid #c5effa!important;outline-offset:-4px!important}
+.pressure-study-cover .ps-cycle{display:block;width:100%;height:100%;margin:0;padding:0;border:0;border-radius:0;appearance:none;background:transparent;color:inherit;box-shadow:none;cursor:pointer;touch-action:manipulation}
+.pressure-study-cover .ps-cycle:focus-visible{outline:2px solid #c5effa;outline-offset:-3px}
 @media(max-width:740px){
   #publications .outputs-heading.pressure-study-cover{--ps-gutter:clamp(18px,5vw,32px)}
   .pressure-study-cover .ps-scene{display:flex;flex-direction:column;height:auto}
@@ -54,15 +40,5 @@
   .pressure-study-cover .ps-copy>p{font-size:15px;line-height:1.72;max-width:30em}
   .pressure-study-cover .ps-art{position:relative;inset:auto;height:clamp(270px,75vw,430px);width:100%;margin-top:4px}
   .pressure-study-cover .ps-detail-id text{font-size:24px}
-  .pressure-study-cover .ps-bar-inner{display:block;min-height:0}
-  .pressure-study-cover .ps-instruction{padding:13px 0 9px;gap:8px;font-size:12px}
-  .pressure-study-cover .ps-instruction i{width:17px}
-  .pressure-study-cover .ps-instruction span{font-size:11px}
-  .pressure-study-cover .ps-selectors{margin-inline:-3px;justify-content:space-between}
-  .pressure-study-cover .ps-selectors button{flex:1;padding:7px 4px;min-height:48px;gap:5px;white-space:nowrap}
-  .pressure-study-cover .ps-selectors button::before{top:auto!important;bottom:0}
-  .pressure-study-cover .ps-selectors button span{font-size:13px}
-  .pressure-study-cover .ps-selectors small{font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.pressure-study-cover .ps-state{transition:none}}
-@media(forced-colors:active){.pressure-study-cover .ps-selectors button[aria-pressed="true"]{outline:2px solid Highlight;outline-offset:-3px}}

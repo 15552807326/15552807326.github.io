@@ -1,22 +1,20 @@
 function initPressureStudy(){
   const cover=document.querySelector('.pressure-study-cover');
-  if(!cover)return;
-  const buttons=[...cover.querySelectorAll('button[data-pressure-select]')];
-  function select(b){
-    cover.dataset.focus=b.dataset.pressureSelect;
-    for(const item of buttons)item.setAttribute('aria-pressed',String(item===b));
+  const control=cover?.querySelector('button.ps-cycle');
+  if(!control)return;
+  const zones=[['warm','暖色核心'],['cool','冷色过渡'],['edge','折面边缘']];
+  let current=zones.findIndex(([id])=>id===cover.dataset.focus);
+  function select(index){
+    current=(index+zones.length)%zones.length;
+    const [id,name]=zones[current];
+    cover.dataset.focus=id;
+    control.setAttribute('aria-label','切换压力云图局部，当前：'+name);
   }
-  for(const [i,b] of buttons.entries()){
-    b.addEventListener('click',()=>select(b));
-    b.addEventListener('keydown',e=>{
-      let target;
-      if(e.key==='Home')target=buttons[0];
-      else if(e.key==='End')target=buttons.at(-1);
-      else if(e.key==='ArrowRight')target=buttons[(i+1)%buttons.length];
-      else if(e.key==='ArrowLeft')target=buttons[(i+buttons.length-1)%buttons.length];
-      else return;
-      e.preventDefault();target.focus();select(target);
-    });
-  }
+  control.addEventListener('click',()=>select(current+1));
+  control.addEventListener('keydown',event=>{
+    const keys={ArrowLeft:current-1,ArrowRight:current+1,Home:0,End:zones.length-1};
+    if(!Object.hasOwn(keys,event.key))return;
+    event.preventDefault();select(keys[event.key]);
+  });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initPressureStudy,{once:true});else initPressureStudy();

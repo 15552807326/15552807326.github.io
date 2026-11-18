@@ -1,0 +1,63 @@
+/* A registered optical plate. No scrolling listeners, duplicated WebGL scenes or global effects. */
+#pro-intro .atlas-hero-plate {--wing-split:52%}
+#pro-intro .wing-study-surface {
+  --read-y:67%;--ruler-top:13%;--ruler-end:90%;
+  inset:1% 0 0 25%;z-index:1;overflow:hidden;mix-blend-mode:normal;
+  -webkit-mask-image:none;mask-image:none;pointer-events:none;
+}
+#pro-intro .wing-study-surface img {
+  position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;
+  object-fit:cover;object-position:25% center;animation:none;transform:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,black 11%);mask-image:linear-gradient(90deg,transparent 0%,black 11%);
+}
+#pro-intro .wing-study-lines {clip-path:inset(0 calc(100% - var(--wing-split)) 0 0)}
+#pro-intro .atlas-hero-inner {z-index:2;pointer-events:none}
+#pro-intro .atlas-hero-copy :is(a,button) {pointer-events:auto}
+#pro-intro .wing-study-instrument {position:absolute;inset:0;pointer-events:none}
+#pro-intro .wing-study-rule {
+  position:absolute;top:var(--ruler-top);bottom:calc(100% - var(--ruler-end));left:var(--wing-split);width:1px;
+  background:linear-gradient(0deg,transparent 0%,#a4d8dc80 14%,#e5faf8 40%,#faf1ccde 73%,#b9d8d95c 94%,transparent 100%);
+  box-shadow:0 0 13px 1px #a8d6d725;
+}
+#pro-intro .wing-study-rule::after {content:"";position:absolute;inset:0 -9px}
+#pro-intro .wing-study-chips {
+  position:absolute;top:var(--ruler-top);left:clamp(93px,var(--wing-split),calc(100% - 93px));transform:translate(-50%,-90%);
+  display:flex;align-items:center;gap:8px;color:#d0dedd;font:500 11px/1.25 var(--font-editorial);letter-spacing:.1em;
+  white-space:nowrap;padding:5px 8px;background:#0105078c;border-radius:3px;text-shadow:0 1px 7px black;
+}
+#pro-intro .wing-study-chips i {height:9px;border-left:1px solid #a3b7bd83}
+#pro-intro .wing-study-chips span:last-child {color:#e8e3d6}
+#pro-intro .wing-study-grip {
+  position:absolute;left:clamp(20px,var(--wing-split),calc(100% - 20px));top:var(--read-y);transform:translate(-50%,-50%);
+  width:39px;height:30px;display:flex;gap:5px;align-items:center;justify-content:center;
+  border:1px solid #c0d0d1;border-radius:999px;background:#0d171bed;color:#f2f5f0;
+  font:17px/1 system-ui,sans-serif;box-shadow:0 2px 10px #0007;
+}
+#pro-intro .wing-study-grip i {height:11px;width:1px;background:#d1c3a9}
+#pro-intro #wing-study-split {
+  position:absolute;left:0;right:0;top:calc(var(--read-y) - 24px);height:48px;width:100%;margin:0;padding:0;
+  opacity:0;pointer-events:auto;cursor:ew-resize;appearance:none;-webkit-appearance:none;touch-action:pan-y;
+}
+#pro-intro #wing-study-split::-webkit-slider-runnable-track {height:48px;width:100%;background:none}
+#pro-intro #wing-study-split::-webkit-slider-thumb {-webkit-appearance:none;width:2px;height:48px;background:none}
+#pro-intro #wing-study-split::-moz-range-thumb {width:2px;height:48px;background:none;border:0}
+#pro-intro .wing-study-surface:has(input:focus-visible) .wing-study-grip {outline:3px solid #eedcb1;outline-offset:4px}
+#pro-intro .wing-study-legend {bottom:27px}
+@media(min-width:1600px){#pro-intro .wing-study-surface{left:31%}}
+@media(max-width:900px) and (min-width:701px){
+  #pro-intro .wing-study-surface{left:43%;opacity:1}
+  #pro-intro .wing-study-surface img{object-position:18% center;-webkit-mask-image:linear-gradient(90deg,transparent,#000 17%);mask-image:linear-gradient(90deg,transparent,#000 17%)}
+  #pro-intro .wing-study-chips{top:18%}
+}
+@media(max-width:700px){
+  #pro-intro .atlas-hero-inner {padding-bottom:clamp(248px,64vw,348px)}
+  #pro-intro .wing-study-surface {--read-y:71%;--ruler-top:9%;--ruler-end:91%;inset:auto 0 0;height:clamp(241px,62vw,338px)}
+  #pro-intro .wing-study-surface img {object-position:66% 43%;-webkit-mask-image:none;mask-image:none}
+  #pro-intro .wing-study-chips {font-size:10px;letter-spacing:.065em;top:11%;background:#02070999}
+  #pro-intro .wing-study-grip {width:35px;height:28px}
+  #pro-intro .wing-study-legend {bottom:10px;left:0;background:#0009;padding:3px 6px 3px 0;border-radius:2px}
+}
+@media(forced-colors:active){
+  #pro-intro .wing-study-surface{opacity:1}
+  #pro-intro .wing-study-rule{background:CanvasText}#pro-intro .wing-study-grip{border:2px solid ButtonText}
+}

@@ -1,0 +1,57 @@
+/* Last shot of research 01 only. The aperture never adds a block to the page. */
+#research-motion-fabric .fabric-flight-reel {
+  position:absolute; inset:0; z-index:2; display:grid; place-items:center;
+  background:#000; pointer-events:none; opacity:0;
+  transition:opacity 740ms cubic-bezier(.42,.02,.23,1);
+}
+#research-motion-fabric[data-film-shot="sky"] .fabric-flight-reel { opacity:1; }
+#research-motion-fabric .fabric-flight-aperture {
+  position:relative; width:100%; height:100%; overflow:hidden;
+}
+#research-motion-fabric .fabric-flight-aperture video {
+  display:block; width:100%; height:100%; object-fit:contain; background:transparent;
+}
+#research-motion-fabric .fabric-flight-aperture::after {
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg,#0003,transparent 9%,transparent 84%,#0004);
+}
+#research-motion-fabric .fabric-flight-control {
+  position:absolute; right:clamp(12px,2.7%,36px); bottom:clamp(15px,7%,46px); z-index:3;
+  display:inline-flex; align-items:center; gap:9px; min-height:42px; padding:0 14px;
+  background:rgba(14,17,19,.86); color:#f6f4eb; border:1px solid #a3a8a56b;
+  border-radius:24px; font-family:inherit; font-size:12px; font-weight:500; line-height:1.15;
+  cursor:pointer; touch-action:manipulation; letter-spacing:.035em;
+}
+#research-motion-fabric .fabric-flight-control[hidden]{display:none}
+#research-motion-fabric .fabric-flight-control small {
+  margin-left:1px; padding-left:9px; border-left:1px solid #acb1b565; color:#d3d1c9;
+  font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.045em;
+}
+#research-motion-fabric .fabric-flight-symbol {
+  display:block; width:11px; height:12px; flex:none; background:currentColor;
+  clip-path:polygon(12% 0,100% 50%,12% 100%);
+}
+#research-motion-fabric[data-film-state="playing"] .fabric-flight-symbol {
+  clip-path:polygon(4% 0,36% 0,36% 100%,4% 100%,4% 0,65% 0,97% 0,97% 100%,65% 100%,65% 0);
+}
+#research-motion-fabric .fabric-flight-control:hover {border-color:#f5f3e6; background:#15181a;}
+#research-motion-fabric .fabric-flight-control:focus-visible {outline:2px solid #fff;outline-offset:4px}
+/* If WebGL is unavailable, dissolve from the existing silver still over the
+   same amount of scroll as the normal camera. Don't force motion on users. */
+@media (prefers-reduced-motion:no-preference) and (forced-colors:none) {
+  #research #research-motion-fabric[data-film-scroll="on"][data-motion-ready="false"] {
+    height:calc(var(--shot-height) + var(--shot-distance)); border-radius:0; overflow:visible; isolation:auto;
+  }
+  #research #research-motion-fabric[data-film-scroll="on"][data-motion-ready="false"] .research-motion-viewport {
+    position:sticky; top:var(--shot-top); height:var(--shot-height); width:100%; overflow:clip; isolation:isolate;
+  }
+  #research #research-motion-fabric[data-film-scroll="on"][data-motion-ready="false"] .research-motion-viewport > img {
+    width:100%; height:100%; object-fit:contain; aspect-ratio:auto;
+  }
+}
+@media(max-width:560px){
+  #research-motion-fabric .fabric-flight-control {min-height:44px; bottom:7%; right:12px}
+}
+@media(prefers-reduced-motion:reduce),(forced-colors:active){
+  #research-motion-fabric .fabric-flight-reel {transition:none}
+}
